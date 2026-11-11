@@ -1,0 +1,4 @@
+price-tracker-backend/node_modules/
+price-tracker-frontend/node_modules/
+.env
+.DS_Store
