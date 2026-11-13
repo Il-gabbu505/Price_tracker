@@ -9,13 +9,12 @@ app.use(cors());
 // Increase the JSON payload limit to handle the Base64 image string[cite: 1]
 app.use(express.json({ limit: '10mb' })); 
 
-// Database Connection
+// Change your pool configuration to this:
 const pool = new Pool({
-  user: 'postgres', // Replace with your PostgreSQL username
-  host: 'localhost',
-  database: 'price_tracker', // Replace with your database name
-  password: 'Realmadrid4life100%', // Replace with your PostgreSQL password
-  port: 5432,
+  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:Realmadrid4life100%@localhost:5432/price_tracker',
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 // API Route to save a new entry
@@ -53,8 +52,6 @@ app.post('/api/entries', async (req, res) => {
   }
 });
 
-// Start the server
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+// Make sure your app.listen looks like this (Render provides process.env.PORT):
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
