@@ -9,19 +9,27 @@ function App() {
   const [products, setProducts] = useState([{ name: '', price: '' }]);
   const [imageBase64, setImageBase64] = useState('');
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setIsSubmitting(true);
+
     const payload = { supermarketName, products, imageBase64 };
 
     try {
       await submitEntry(payload);
       alert('Entry saved successfully!');
+
       setSupermarketName('');
       setProducts([{ name: '', price: '' }]);
       setImageBase64('');
     } catch (error) {
       console.error('Error saving entry:', error);
       alert('Failed to save entry.');
+    } finally {
+      setIsSubmitting(false)
     }
   };
 
@@ -52,8 +60,13 @@ function App() {
           setProducts={setProducts} 
         />
 
-        <button type="submit" className="btn-submit">
-          Save Entry
+        <button 
+          type="submit" 
+          className="btn-submit" 
+          disabled={isSubmitting}
+          style={{ cursor: isSubmitting ? 'not-allowed' : 'pointer', opacity: isSubmitting ? 0.7 : 1 }}
+        >
+          {isSubmitting ? 'Saving to Database...' : 'Save Entry'}
         </button>
 
       </form>
